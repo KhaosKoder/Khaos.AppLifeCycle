@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PackageId>Khaos.AppLifecycle</PackageId>
+    <Description>Application lifecycle manager for .NET: startup/shutdown flows with a unified flow engine and scheduled jobs.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>lifecycle;startup;shutdown;scheduler</PackageTags>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="content/AppLifecycle/Startup/_README_Startup.txt" Pack="true" PackagePath="contentFiles/any/any/AppLifecycle/Startup/" />
+    <Content Include="content/AppLifecycle/Shutdown/_README_Shutdown.txt" Pack="true" PackagePath="contentFiles/any/any/AppLifecycle/Shutdown/" />
+    <Content Include="content/AppLifecycle/Scheduled/Triggers/_README_Triggers.txt" Pack="true" PackagePath="contentFiles/any/any/AppLifecycle/Scheduled/Triggers/" />
+    <Content Include="content/AppLifecycle/Scheduled/Actions/_README_Actions.txt" Pack="true" PackagePath="contentFiles/any/any/AppLifecycle/Scheduled/Actions/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="" Link="README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>

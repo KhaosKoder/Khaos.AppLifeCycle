@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Derick Olivier</Authors>
+    <Company>Khaos</Company>
+    <RepositoryUrl>https://github.com/khaos-labs/Khaos.AppLifecycle</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/khaos-labs/Khaos.AppLifecycle</PackageProjectUrl>
+
+    <MinVerTagPrefix>Khaos.AppLifecycle/v</MinVerTagPrefix>
+    <MinVerAutoIncrement>minor</MinVerAutoIncrement>
+    <MinVerDefaultPreReleaseIdentifiers>alpha</MinVerDefaultPreReleaseIdentifiers>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(MinVerVersion)' != ''">
+    <Version>$(MinVerVersion)</Version>
+    <PackageVersion>$(MinVerPackageVersion)</PackageVersion>
+    <AssemblyVersion>$(MinVerAssemblyVersion)</AssemblyVersion>
+    <FileVersion>$(MinVerFileVersion)</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="5.*" PrivateAssets="all" />
+  </ItemGroup>
+</Project>
