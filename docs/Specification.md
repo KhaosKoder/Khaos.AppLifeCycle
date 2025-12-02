@@ -1,4 +1,4 @@
-# Khaos.AppLifecycle – Full Specification (v3)
+# Khaos.AppLifecycle – Full Specification
 
 ## 1. Overview
 
