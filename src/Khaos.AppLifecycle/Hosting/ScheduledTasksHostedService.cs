@@ -3,6 +3,7 @@ using Khaos.AppLifecycle.Flows;
 using Khaos.AppLifecycle.Internal;
 using Khaos.AppLifecycle.Options;
 using Khaos.AppLifecycle.Scheduling;
+using Khaos.Time;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,7 @@ internal sealed class ScheduledTasksHostedService : BackgroundService
     private readonly ILogger<ScheduledTasksHostedService> _logger;
     private readonly TimeSpan _triggerFailureDelay;
     private readonly Dictionary<string, SemaphoreSlim> _overlapGuards = new(StringComparer.Ordinal);
+    private readonly ISystemClock _clock;
 
     public ScheduledTasksHostedService(
         IServiceProvider services,
@@ -27,7 +29,8 @@ internal sealed class ScheduledTasksHostedService : BackgroundService
         ApplicationLifecycleOptions options,
         ApplicationLifecycleEvents events,
         ILogger<ScheduledTasksHostedService> logger,
-        TimeSpan? triggerFailureDelay = null)
+        TimeSpan? triggerFailureDelay = null,
+        ISystemClock? clock = null)
     {
         _services = services;
         _hostEnvironment = hostEnvironment;
@@ -35,6 +38,7 @@ internal sealed class ScheduledTasksHostedService : BackgroundService
         _events = events;
         _logger = logger;
         _triggerFailureDelay = triggerFailureDelay ?? DefaultTriggerFailureDelay;
+        _clock = clock ?? SystemClock.Instance;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -85,7 +89,7 @@ internal sealed class ScheduledTasksHostedService : BackgroundService
                 _services,
                 _hostEnvironment,
                 definition.FlowName,
-                DateTimeOffset.UtcNow);
+                _clock.Now);
 
             try
             {
@@ -121,7 +125,7 @@ internal sealed class ScheduledTasksHostedService : BackgroundService
         {
             using var scope = _services.CreateScope();
             var trigger = (IScheduleTrigger)scope.ServiceProvider.GetRequiredService(definition.TriggerType);
-            var context = new ScheduledContext(_services, _hostEnvironment, definition.FlowName, DateTimeOffset.UtcNow);
+            var context = new ScheduledContext(_services, _hostEnvironment, definition.FlowName, _clock.Now);
             return await trigger.GetNextDelayAsync(context, stoppingToken).ConfigureAwait(false);
         }
         catch (Exception ex)
