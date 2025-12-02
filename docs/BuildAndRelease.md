@@ -1,12 +1,25 @@
 # Build, Test, Coverage, and Release Guide
 
-Everything below assumes execution from the repository root (`C:\My\Code\POC\Khaos.AppLifeCycle`). Output files are written to the `TestResults/` folder instead of the former `artifacts/` tree.
+Everything below assumes execution from the repository root (`C:\My\Code\POC\Khaos.AppLifeCycle`). Test artifacts continue to live under `TestResults/`, while NuGet packages are written to `artifacts/`.
 
 ## Prerequisites
 
 - .NET SDK 8.0 (or newer) for multi-target builds.
 - PowerShell 5.1+ (the default shell) for helper scripts under `scripts/`.
 - Local dotnet tools restored (`dotnet tool restore`).
+
+## Helper Scripts
+
+The `scripts/` folder contains wrappers that set the correct working directory so each script can be run in-place:
+
+| Task | Command | Output |
+| --- | --- | --- |
+| Deep clean bin/obj/.vs/TestResults/artifacts | `powershell -ExecutionPolicy Bypass -File .\scripts\Clean-All.ps1` | Removes `bin/`, `obj/`, `.vs/`, `TestResults/`, `artifacts/` |
+| Build solution | `powershell -ExecutionPolicy Bypass -File .\scripts\Build.ps1 [-Configuration Release]` | Standard MSBuild output in `bin/obj` |
+| Run tests + emit TRX | `powershell -ExecutionPolicy Bypass -File .\scripts\Test.ps1 [-Configuration Release]` | `TestResults/trx/Tests.trx` |
+| Coverage run | `powershell -ExecutionPolicy Bypass -File .\scripts\GenerateCoverage.ps1 [-Open]` | `TestResults/raw`, `TestResults/coverage` |
+| Pack NuGet | `powershell -ExecutionPolicy Bypass -File .\scripts\Pack.ps1 [-Configuration Release]` | `artifacts/nuget/*.nupkg` |
+| Publish package | `powershell -ExecutionPolicy Bypass -File .\scripts\Publish.ps1 -ApiKey <KEY> [-Source <feed>]` | Pushes latest `artifacts/nuget/*.nupkg` |
 
 ## Cleaning the Workspace
 
@@ -84,9 +97,11 @@ Start-Process (Resolve-Path .\TestResults\coverage\index.html)
 | Task | Command |
 | --- | --- |
 | Build Release bits | `dotnet build -c Release` |
-| Pack NuGet (drops into `TestResults/nuget`) | `dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -o TestResults/nuget` |
-| Inspect `.nupkg` | `tar -tf TestResults/nuget/Khaos.AppLifecycle.<version>.nupkg` |
-| Push to NuGet.org | `dotnet nuget push TestResults/nuget/Khaos.AppLifecycle.<version>.nupkg --api-key <KEY> --source https://api.nuget.org/v3/index.json --skip-duplicate` |
+| Pack NuGet (drops into `artifacts/nuget`) | `dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -o artifacts/nuget` |
+| Inspect `.nupkg` | `tar -tf artifacts/nuget/Khaos.AppLifecycle.<version>.nupkg` |
+| Push to NuGet.org | `dotnet nuget push artifacts/nuget/Khaos.AppLifecycle.<version>.nupkg --api-key <KEY> --source https://api.nuget.org/v3/index.json --skip-duplicate` |
+
+> Tip: `Pack.ps1` and `Publish.ps1` wrap the last two commands and always target `artifacts/nuget`.
 
 ## Useful Extras
 
@@ -100,7 +115,7 @@ Start-Process (Resolve-Path .\TestResults\coverage\index.html)
   dotnet restore
   dotnet build -c Release
   dotnet test -c Release
-  dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -o TestResults/nuget
+  dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -o artifacts/nuget
   ```
 
 ## Viewing Results in a Browser
@@ -114,7 +129,7 @@ Start-Process (Resolve-Path .\TestResults\coverage\index.html)
 2. `dotnet build -c Release`
 3. `dotnet test --collect:"XPlat Code Coverage" --results-directory TestResults/raw`
 4. `dotnet tool run reportgenerator ...`
-5. `dotnet pack -c Release`
-6. Optional: `dotnet nuget push ...`
+5. `dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -o artifacts/nuget`
+6. Optional: `dotnet nuget push artifacts/nuget/Khaos.AppLifecycle.<version>.nupkg ...`
 
 Cache `~/.nuget/packages`, `.config/dotnet-tools.json`, and the `TestResults` folder if CI artifacts are retained between runs.

@@ -27,6 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\docs\**\*.*" Pack="true" PackagePath="docs\%(RecursiveDir)%(Filename)%(Extension)" />
+    <None Include="buildTransitive\**\*.targets" Pack="true" PackagePath="buildTransitive\%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />

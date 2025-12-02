@@ -69,7 +69,7 @@ This repository represents a single product in the Khaos ecosystem. Other repos 
 2. `dotnet test` (or `powershell -ExecutionPolicy Bypass -File .\scripts\GenerateCoverage.ps1` for a full test + coverage run).
 3. Choose SemVer: `MAJOR.MINOR.PATCH`.
 4. `git tag Khaos.AppLifecycle/vX.Y.Z && git push origin Khaos.AppLifecycle/vX.Y.Z`.
-5. `dotnet pack -c Release` (produces `.nupkg` files in `TestResults/nuget` if you override the output, or under each project’s `bin/Release` by default).
+5. `powershell -ExecutionPolicy Bypass -File .\scripts\Pack.ps1 -Configuration Release` (drops `.nupkg` files into `artifacts/nuget`).
 6. `dotnet nuget push ...` if releasing to NuGet.org (optional here).
 
 That’s it—MinVer takes care of keeping `Version`, `PackageVersion`, `AssemblyVersion`, and `FileVersion` aligned across all packable projects.

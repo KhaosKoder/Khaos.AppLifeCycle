@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup>
+    <KhaosAppLifecycleDocsFolderName Condition="'$(KhaosAppLifecycleDocsFolderName)' == ''">Khaos.AppLifecycle</KhaosAppLifecycleDocsFolderName>
+    <KhaosAppLifecycleDocsTargetRoot Condition="'$(KhaosAppLifecycleDocsTargetRoot)' == '' and '$(SolutionDir)' != ''">$(SolutionDir)docs\$(KhaosAppLifecycleDocsFolderName)\</KhaosAppLifecycleDocsTargetRoot>
+    <KhaosAppLifecycleDocsSourceRoot Condition="'$(KhaosAppLifecycleDocsSourceRoot)' == ''">$(MSBuildThisFileDirectory)..\docs\</KhaosAppLifecycleDocsSourceRoot>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(SolutionDir)' != ''">
+    <KhaosAppLifecycleDoc Include="$(KhaosAppLifecycleDocsSourceRoot)**/*.*" />
+  </ItemGroup>
+
+  <Target Name="KhaosAppLifecycleCopyDocs"
+          Condition="'$(SolutionDir)' != ''"
+          AfterTargets="Restore"
+          BeforeTargets="BeforeBuild"
+          Inputs="@(KhaosAppLifecycleDoc)"
+          Outputs="@(KhaosAppLifecycleDoc->'$(KhaosAppLifecycleDocsTargetRoot)%(RecursiveDir)%(Filename)%(Extension)')">
+    <Message Text="[Khaos.AppLifecycle] Syncing docs to $(KhaosAppLifecycleDocsTargetRoot)" Importance="low" />
+    <MakeDir Directories="$(KhaosAppLifecycleDocsTargetRoot)" />
+    <Copy SourceFiles="@(KhaosAppLifecycleDoc)"
+          DestinationFiles="@(KhaosAppLifecycleDoc->'$(KhaosAppLifecycleDocsTargetRoot)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>
