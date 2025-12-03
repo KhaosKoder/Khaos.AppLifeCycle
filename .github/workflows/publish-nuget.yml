@@ -12,6 +12,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      UseLocalKhaosTime: 'false'
 
     steps:
       - name: Checkout
@@ -41,11 +43,12 @@ jobs:
             exit 1
           fi
 
-          dotnet pack src/Khaos.AppLifeCycle/Khaos.AppLifeCycle.csproj \
-                 --configuration Release \
-                 --no-build \
-                 -p:PackageVersion=$VERSION \
-                 -o ./artifacts
+             dotnet pack src/Khaos.AppLifeCycle/Khaos.AppLifeCycle.csproj \
+               --configuration Release \
+               --no-build \
+               -p:PackageVersion=$VERSION \
+               -p:UseLocalKhaosTime=false \
+               -o ./artifacts
 
       # Exchange GitHub OIDC token -> short-lived API key on nuget.org
       - name: NuGet login (Trusted Publishing)

@@ -857,7 +857,7 @@ public sealed class ApplicationLifecycleException : Exception
 
 Suggested:
 
-- `PackageId`: `Khaos.AppLifecycle`
+- `PackageId`: `KhaosCode.AppLifecycle`
     
 - `Authors`: `Derick Olivier` (or `Khaos` – your call)
     

@@ -7,12 +7,15 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PackageId>Khaos.AppLifecycle</PackageId>
+    <PackageId>KhaosCode.AppLifecycle</PackageId>
     <Description>Application lifecycle manager for .NET: startup/shutdown flows with a unified flow engine and scheduled jobs.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>lifecycle;startup;shutdown;scheduler</PackageTags>
     <SignAssembly>false</SignAssembly>
+    <UseLocalKhaosTime Condition="'$(UseLocalKhaosTime)' == ''">true</UseLocalKhaosTime>
+    <KhaosTimeProjectPath Condition="'$(KhaosTimeProjectPath)' == ''">..\..\..\src\Khaos.Time\Khaos.Time.csproj</KhaosTimeProjectPath>
+    <KhaosTimePackageVersion Condition="'$(KhaosTimePackageVersion)' == ''">1.0.0</KhaosTimePackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,8 +41,17 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Khaos.Time\Khaos.Time.csproj" />
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(UseLocalKhaosTime)' == 'true'">
+      <ItemGroup>
+        <ProjectReference Include="$(KhaosTimeProjectPath)" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="KhaosCode.Time" Version="$(KhaosTimePackageVersion)" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 
 </Project>

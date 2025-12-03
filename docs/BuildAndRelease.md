@@ -18,8 +18,12 @@ The `scripts/` folder contains wrappers that set the correct working directory s
 | Build solution | `powershell -ExecutionPolicy Bypass -File .\scripts\Build.ps1 [-Configuration Release]` | Standard MSBuild output in `bin/obj` |
 | Run tests + emit TRX | `powershell -ExecutionPolicy Bypass -File .\scripts\Test.ps1 [-Configuration Release]` | `TestResults/trx/Tests.trx` |
 | Coverage run | `powershell -ExecutionPolicy Bypass -File .\scripts\GenerateCoverage.ps1 [-Open]` | `TestResults/raw`, `TestResults/coverage` |
-| Pack NuGet | `powershell -ExecutionPolicy Bypass -File .\scripts\Pack.ps1 [-Configuration Release]` | `artifacts/nuget/*.nupkg` |
+| Pack NuGet | `powershell -ExecutionPolicy Bypass -File .\scripts\Pack.ps1 [-Configuration Release] [-UseLocalKhaosTime]` | `artifacts/nuget/*.nupkg` |
 | Publish package | `powershell -ExecutionPolicy Bypass -File .\scripts\Publish.ps1 -ApiKey <KEY> [-Source <feed>]` | Pushes latest `artifacts/nuget/*.nupkg` |
+
+### Khaos.Time Dependency Toggle
+
+`Khaos.AppLifecycle` depends on `Khaos.Time`. During local development we normally build both repos side-by-side, so the library defaults to referencing the project at `src/Khaos.Time`. Set the MSBuild property `UseLocalKhaosTime=false` (or run `Pack.ps1` without the `-UseLocalKhaosTime` switch) to consume the published `KhaosCode.Time` NuGet package instead—this is what CI and release builds use. You can pass the property via CLI (`dotnet build /p:UseLocalKhaosTime=false`) or environment variable `UseLocalKhaosTime=false`.
 
 ## Cleaning the Workspace
 
@@ -97,11 +101,11 @@ Start-Process (Resolve-Path .\TestResults\coverage\index.html)
 | Task | Command |
 | --- | --- |
 | Build Release bits | `dotnet build -c Release` |
-| Pack NuGet (drops into `artifacts/nuget`) | `dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -o artifacts/nuget` |
-| Inspect `.nupkg` | `tar -tf artifacts/nuget/Khaos.AppLifecycle.<version>.nupkg` |
-| Push to NuGet.org | `dotnet nuget push artifacts/nuget/Khaos.AppLifecycle.<version>.nupkg --api-key <KEY> --source https://api.nuget.org/v3/index.json --skip-duplicate` |
+| Pack NuGet (drops into `artifacts/nuget`) | `dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -p:UseLocalKhaosTime=false -o artifacts/nuget` |
+| Inspect `.nupkg` | `tar -tf artifacts/nuget/KhaosCode.AppLifecycle.<version>.nupkg` |
+| Push to NuGet.org | `dotnet nuget push artifacts/nuget/KhaosCode.AppLifecycle.<version>.nupkg --api-key <KEY> --source https://api.nuget.org/v3/index.json --skip-duplicate` |
 
-> Tip: `Pack.ps1` and `Publish.ps1` wrap the last two commands and always target `artifacts/nuget`.
+> Tip: `Pack.ps1` (run without `-UseLocalKhaosTime`) sets `UseLocalKhaosTime=false` for you, and `Publish.ps1` simply pushes whatever is under `artifacts/nuget`.
 
 ## Useful Extras
 
@@ -115,7 +119,7 @@ Start-Process (Resolve-Path .\TestResults\coverage\index.html)
   dotnet restore
   dotnet build -c Release
   dotnet test -c Release
-  dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -o artifacts/nuget
+  dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -p:UseLocalKhaosTime=false -o artifacts/nuget
   ```
 
 ## Viewing Results in a Browser
@@ -129,7 +133,7 @@ Start-Process (Resolve-Path .\TestResults\coverage\index.html)
 2. `dotnet build -c Release`
 3. `dotnet test --collect:"XPlat Code Coverage" --results-directory TestResults/raw`
 4. `dotnet tool run reportgenerator ...`
-5. `dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -o artifacts/nuget`
-6. Optional: `dotnet nuget push artifacts/nuget/Khaos.AppLifecycle.<version>.nupkg ...`
+5. `dotnet pack src/Khaos.AppLifecycle/Khaos.AppLifecycle.csproj -c Release -p:UseLocalKhaosTime=false -o artifacts/nuget`
+6. Optional: `dotnet nuget push artifacts/nuget/KhaosCode.AppLifecycle.<version>.nupkg ...`
 
 Cache `~/.nuget/packages`, `.config/dotnet-tools.json`, and the `TestResults` folder if CI artifacts are retained between runs.

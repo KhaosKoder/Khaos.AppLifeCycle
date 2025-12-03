@@ -2,7 +2,7 @@
 
 ## Overview
 
-Khaos.AppLifecycle uses Semantic Versioning 2.0.0 with Git tags as the single source of truth. We rely on [MinVer](https://github.com/adamralph/minver) (configured in `Directory.Build.props`) to compute the version during every build, pack, and publish. All packable projects within this solution (currently `src/Khaos.AppLifecycle`) share the exact same version for a given commit. Test and sample projects inherit the configuration but remain non-packable.
+KhaosCode.AppLifecycle uses Semantic Versioning 2.0.0 with Git tags as the single source of truth. We rely on [MinVer](https://github.com/adamralph/minver) (configured in `Directory.Build.props`) to compute the version during every build, pack, and publish. All packable projects within this solution (currently `src/Khaos.AppLifecycle`) share the exact same version for a given commit. Test and sample projects inherit the configuration but remain non-packable.
 
 - Tag prefix: **`Khaos.AppLifecycle/v`**
 - Example release tag: `Khaos.AppLifecycle/v1.4.0`
@@ -28,7 +28,7 @@ Khaos.AppLifecycle uses Semantic Versioning 2.0.0 with Git tags as the single so
    ```
 4. Build and pack:
    ```bash
-   dotnet pack -c Release
+  dotnet pack -c Release -p:UseLocalKhaosTime=false
    ```
    MinVer reads the newest tag, so every `.nupkg` generated for packable projects shares that same version.
 5. Publish the packages (if desired) using `dotnet nuget push` or the release pipeline.
@@ -61,7 +61,7 @@ Khaos.AppLifecycle uses Semantic Versioning 2.0.0 with Git tags as the single so
 
 ## Relation to Other Libraries
 
-This repository represents a single product in the Khaos ecosystem. Other repos may depend on specific `Khaos.AppLifecycle` versions, but each repo maintains its own version tags and release cadence. When publishing bundles or meta-packages elsewhere, reference the exact `Khaos.AppLifecycle` version you require (e.g., `>=1.2.0`).
+This repository represents a single product in the Khaos ecosystem. Other repos may depend on specific `KhaosCode.AppLifecycle` versions, but each repo maintains its own version tags and release cadence. When publishing bundles or meta-packages elsewhere, reference the exact `KhaosCode.AppLifecycle` version you require (e.g., `>=1.2.0`).
 
 ## Release Workflow Summary
 

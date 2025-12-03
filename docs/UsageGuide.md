@@ -5,14 +5,14 @@ This guide targets developers consuming the NuGet package in their applications.
 ## Installation
 
 ```powershell
-Install-Package Khaos.AppLifecycle
+Install-Package KhaosCode.AppLifecycle
 ```
 
 Or add the package reference directly in your project file:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="Khaos.AppLifecycle" Version="x.y.z" />
+    <PackageReference Include="KhaosCode.AppLifecycle" Version="x.y.z" />
 </ItemGroup>
 ```
 

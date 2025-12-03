@@ -16,6 +16,10 @@ This guide is for contributors extending the library. It captures the architectu
 - `samples/Khaos.AppLifecycle.SampleWebApp`
   - Minimal host demonstrating startup/shutdown/scheduled flows and event hooks.
 
+## External Dependencies
+
+- `Khaos.Time` supplies scheduling helpers such as `ISystemClock`. The library defaults to consuming a sibling checkout via `UseLocalKhaosTime=true`. If you do not have that repo available, set `UseLocalKhaosTime=false` (CLI: `dotnet build /p:UseLocalKhaosTime=false`) to rely on the published `KhaosCode.Time` NuGet package. The release `Pack.ps1` script already passes `UseLocalKhaosTime=false` so CI and official builds do not require the local source tree.
+
 ## Coding Conventions
 
 - Target `net8.0` and `net9.0`; keep code analyzers happy with `TreatWarningsAsErrors=true` (CS1591 suppressed intentionally).
