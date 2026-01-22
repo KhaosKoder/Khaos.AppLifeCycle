@@ -1,7 +1,8 @@
 <Project>
   <PropertyGroup>
-    <Authors>Derick Olivier</Authors>
+    <Authors>Khaos</Authors>
     <Company>Khaos</Company>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts\</PackageOutputPath>
     <RepositoryUrl>https://github.com/khaos-labs/Khaos.AppLifecycle</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -9,7 +10,7 @@
 
     <MinVerTagPrefix>Khaos.AppLifecycle/v</MinVerTagPrefix>
     <MinVerAutoIncrement>minor</MinVerAutoIncrement>
-    <MinVerDefaultPreReleaseIdentifiers>alpha</MinVerDefaultPreReleaseIdentifiers>
+    <MinVerDefaultPreReleaseIdentifiers>alpha.0</MinVerDefaultPreReleaseIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(MinVerVersion)' != ''">

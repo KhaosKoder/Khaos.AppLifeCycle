@@ -13,8 +13,9 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>lifecycle;startup;shutdown;scheduler</PackageTags>
     <SignAssembly>false</SignAssembly>
-    <UseLocalKhaosTime Condition="'$(UseLocalKhaosTime)' == ''">true</UseLocalKhaosTime>
-    <KhaosTimeProjectPath Condition="'$(KhaosTimeProjectPath)' == ''">..\..\..\src\Khaos.Time\Khaos.Time.csproj</KhaosTimeProjectPath>
+    <KhaosTimeProjectPath Condition="'$(KhaosTimeProjectPath)' == ''">..\..\..\Khaos.Time\src\Khaos.Time\Khaos.Time.csproj</KhaosTimeProjectPath>
+    <UseLocalKhaosTime Condition="'$(UseLocalKhaosTime)' == '' AND Exists('$(KhaosTimeProjectPath)')">true</UseLocalKhaosTime>
+    <UseLocalKhaosTime Condition="'$(UseLocalKhaosTime)' == ''">false</UseLocalKhaosTime>
     <KhaosTimePackageVersion Condition="'$(KhaosTimePackageVersion)' == ''">1.0.0</KhaosTimePackageVersion>
   </PropertyGroup>
 
