@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
@@ -7,7 +7,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PackageId>KhaosCode.AppLifecycle</PackageId>
+    <PackageId>KhaosKode.AppLifecycle</PackageId>
     <Description>Application lifecycle manager for .NET: startup/shutdown flows with a unified flow engine and scheduled jobs.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -50,7 +50,7 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="KhaosCode.Time" Version="$(KhaosTimePackageVersion)" />
+        <PackageReference Include="KhaosKode.Time" Version="$(KhaosTimePackageVersion)" />
       </ItemGroup>
     </Otherwise>
   </Choose>
